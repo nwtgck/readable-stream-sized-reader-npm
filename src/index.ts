@@ -18,9 +18,10 @@ export class ReadableStreamSizedReader implements ReadableStreamDefaultReader<Ui
     this.reader.releaseLock();
   }
 
-  private async _read(size: number, buff: Uint8Array | undefined): Promise<ReadableStreamReadResult<Uint8Array>> {
-    const values: Uint8Array[] = buff === undefined ? [] : [buff];
-    let totalLen: number = buff === undefined ? 0 : buff.byteLength;
+  private async _read(size: number): Promise<ReadableStreamReadResult<Uint8Array>> {
+    const values: Uint8Array[] = this.buff === undefined ? [] : [this.buff];
+    let totalLen: number = this.buff === undefined ? 0 : this.buff.byteLength;
+    this.buff = undefined;
     while (true) {
       const result = await this.reader.read();
       if (result.done) {
@@ -48,7 +49,7 @@ export class ReadableStreamSizedReader implements ReadableStreamDefaultReader<Ui
 
     // If no buffer
     if (this.buff === undefined) {
-      return this._read(size, undefined);
+      return this._read(size);
     }
 
     // If buffer is enough to return
@@ -58,8 +59,6 @@ export class ReadableStreamSizedReader implements ReadableStreamDefaultReader<Ui
       return { value: ret, done: false };
     }
 
-    const buff = this.buff;
-    this.buff = undefined;
-    return this._read(size, buff);
+    return this._read(size);
   }
 }
