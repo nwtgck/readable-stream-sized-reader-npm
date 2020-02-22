@@ -25,6 +25,7 @@ export class ReadableStreamSizedReader implements ReadableStreamDefaultReader<Ui
     while (true) {
       const result = await this.reader.read();
       if (result.done) {
+        if (values.length === 0) return result;
         this.done = true;
         return {
           value: mergeUint8Arrays(values),
