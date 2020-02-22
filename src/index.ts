@@ -1,5 +1,8 @@
+import {mergeUint8Arrays} from "binconv/dist/src/mergeUint8Arrays";
+
 export class ReadableStreamSizedReader implements ReadableStreamDefaultReader<Uint8Array> {
   private buff: Uint8Array | undefined;
+  private done: boolean = false;
 
   constructor(private readonly reader: ReadableStreamDefaultReader<Uint8Array>) { }
 
@@ -15,27 +18,37 @@ export class ReadableStreamSizedReader implements ReadableStreamDefaultReader<Ui
     this.reader.releaseLock();
   }
 
-  private async _read(size: number): Promise<ReadableStreamReadResult<Uint8Array>> {
-    const result = await this.reader.read();
-    if (result.done) {
-      return result;
+  private async _read(size: number, buff: Uint8Array | undefined): Promise<ReadableStreamReadResult<Uint8Array>> {
+    const values: Uint8Array[] = buff === undefined ? [] : [buff];
+    let totalLen: number = buff === undefined ? 0 : buff.byteLength;
+    while (true) {
+      const result = await this.reader.read();
+      if (result.done) {
+        this.done = true;
+        return {
+          value: mergeUint8Arrays(values),
+          done: false
+        };
+      }
+      totalLen += result.value.byteLength;
+      if (totalLen >= size) {
+        const merged = mergeUint8Arrays(values);
+        this.buff = merged.slice(size);
+        return {
+          value: merged.slice(0, size),
+          done: false
+        };
+      }
     }
-    if (result.value.byteLength <= size) {
-      return result;
-    }
-    this.buff = result.value.slice(size);
-    return {
-      value: result.value.slice(0, size),
-      done: false
-    };
   }
 
   async read(size?: number): Promise<ReadableStreamReadResult<Uint8Array>> {
+    if (this.done) return {value: undefined, done: true};
     if (size === undefined) return this.reader.read();
 
     // If no buffer
     if (this.buff === undefined) {
-      return this._read(size);
+      return this._read(size, undefined);
     }
 
     // If buffer is enough to return
@@ -44,9 +57,9 @@ export class ReadableStreamSizedReader implements ReadableStreamDefaultReader<Ui
       this.buff = this.buff.slice(size);
       return { value: ret, done: false };
     }
-    
-    const value = this.buff;
+
+    const buff = this.buff;
     this.buff = undefined;
-    return { value, done: false };
+    return this._read(size, buff);
   }
 }
