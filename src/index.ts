@@ -18,7 +18,7 @@ export class ReadableStreamSizedReader implements ReadableStreamDefaultReader<Ui
   private async _read(size: number): Promise<ReadableStreamReadResult<Uint8Array>> {
     const result = await this.reader.read();
     if (result.done) {
-      return { value: undefined, done: true };
+      return result;
     }
     if (result.value.byteLength <= size) {
       return result;
@@ -36,14 +36,14 @@ export class ReadableStreamSizedReader implements ReadableStreamDefaultReader<Ui
     // If no buffer
     if (this.buff === undefined) {
       return this._read(size);
-    } else {
-      // If buffer is enough to return
-      if (this.buff.byteLength >= size) {
-        const ret = this.buff.slice(0, size);
-        this.buff = this.buff.slice(size);
-        return { value: ret, done: false };
-      }
-      return this._read(size);
     }
+
+    // If buffer is enough to return
+    if (this.buff.byteLength >= size) {
+      const ret = this.buff.slice(0, size);
+      this.buff = this.buff.slice(size);
+      return { value: ret, done: false };
+    }
+    return this._read(size);
   }
 }
