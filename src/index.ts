@@ -44,6 +44,9 @@ export class ReadableStreamSizedReader implements ReadableStreamDefaultReader<Ui
       this.buff = this.buff.slice(size);
       return { value: ret, done: false };
     }
-    return this._read(size);
+    
+    const value = this.buff;
+    this.buff = undefined;
+    return { value, done: false };
   }
 }
