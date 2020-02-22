@@ -1,7 +1,7 @@
 export class ReadableStreamSizedReader implements ReadableStreamDefaultReader<Uint8Array> {
   private buff: Uint8Array | undefined;
 
-  constructor(private readonly reader: ReadableStreamDefaultReader) { }
+  constructor(private readonly reader: ReadableStreamDefaultReader<Uint8Array>) { }
 
   get closed(): Promise<void> {
     return this.reader.closed;
@@ -15,16 +15,19 @@ export class ReadableStreamSizedReader implements ReadableStreamDefaultReader<Ui
     this.reader.releaseLock();
   }
 
-  private async _read(size: number) {
-    const { value, done } = await this.reader.read();
-    if (done) {
+  private async _read(size: number): Promise<ReadableStreamReadResult<Uint8Array>> {
+    const result = await this.reader.read();
+    if (result.done) {
       return { value: undefined, done: true };
     }
-    if (value.byteLength <= size) {
-      return { value, done };
+    if (result.value.byteLength <= size) {
+      return result;
     }
-    this.buff = value.slice(size);
-    return value.slice(0, size);
+    this.buff = result.value.slice(size);
+    return {
+      value: result.value.slice(0, size),
+      done: false
+    };
   }
 
   async read(size?: number): Promise<ReadableStreamReadResult<Uint8Array>> {
