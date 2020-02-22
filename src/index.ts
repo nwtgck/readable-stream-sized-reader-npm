@@ -36,7 +36,7 @@ export class ReadableStreamSizedReader implements ReadableStreamDefaultReader<Ui
       values.push(result.value);
       if (totalLen >= size) {
         const merged = mergeUint8Arrays(values);
-        this.buff = merged.slice(size);
+        if (totalLen > size) this.buff = merged.slice(size);
         return {
           value: merged.slice(0, size),
           done: false
