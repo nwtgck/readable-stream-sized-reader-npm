@@ -33,6 +33,7 @@ export class ReadableStreamSizedReader implements ReadableStreamDefaultReader<Ui
         };
       }
       totalLen += result.value.byteLength;
+      values.push(result.value);
       if (totalLen >= size) {
         const merged = mergeUint8Arrays(values);
         this.buff = merged.slice(size);
