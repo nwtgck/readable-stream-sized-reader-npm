@@ -1,0 +1,33 @@
+{
+  "name": "readable-stream-sized-reader",
+  "version": "0.1.0-SNAPSHOT",
+  "description": "ReadableStream Reader with specified byte length read()",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build",
+    "test": "mocha --require ts-node/register test/**/*.ts"
+  },
+  "keywords": [
+    "ReadableStream",
+    "read",
+    "binary"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nwtgck/readable-stream-sized-reader"
+  },
+  "author": "Ryo Ota <nwtgck@nwtgck.org> (https://github.com/nwtgck)",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^13.7.4",
+    "@types/power-assert": "^1.5.3",
+    "mocha": "^6.2.2",
+    "power-assert": "^1.6.1",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.8.2"
+  },
+  "dependencies": {}
+}
