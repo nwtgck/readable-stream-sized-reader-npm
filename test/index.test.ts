@@ -64,4 +64,41 @@ describe('ReadableStreamSizedReader', () => {
       assert.deepStrictEqual(actual, { done: true, value: undefined });
     }
   });
+
+  it('should read specific size and read without size together', async () => {
+    const readable = createReadableStream1();
+    const reader = new ReadableStreamSizedReader(readable.getReader());
+
+    {
+      const actual = await reader.read(2);
+      assert.deepStrictEqual(actual, { done: false, value: new Uint8Array([1, 2]) });
+    }
+
+    {
+      // NOTE: read() without size
+      const actual = await reader.read();
+      assert.deepStrictEqual(actual, { done: false, value: new Uint8Array([3]) });
+    }
+
+    {
+      // NOTE: read() without size
+      const actual = await reader.read();
+      assert.deepStrictEqual(actual, { done: false, value: new Uint8Array([4, 5]) });
+    }
+
+    {
+      const actual = await reader.read(3);
+      assert.deepStrictEqual(actual, { done: false, value: new Uint8Array([6, 7, 8]) });
+    }
+
+    {
+      const actual = await reader.read(3);
+      assert.deepStrictEqual(actual, { done: false, value: new Uint8Array([9, 10]) });
+    }
+
+    {
+      const actual = await reader.read(3);
+      assert.deepStrictEqual(actual, { done: true, value: undefined });
+    }
+  });
 });
