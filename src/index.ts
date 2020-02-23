@@ -45,13 +45,35 @@ export class ReadableStreamSizedReader implements ReadableStreamDefaultReader<Ui
     }
   }
 
-  async read(size?: number): Promise<ReadableStreamReadResult<Uint8Array>> {
+  /**
+   * Read n size bytes
+   * @param size
+   * @param readAsPossible If true, read n size bytes as possible. If false, read() is called() at most once internally.
+   */
+  async read(size?: number, readAsPossible: boolean = true): Promise<ReadableStreamReadResult<Uint8Array>> {
     if (this.done) return {value: undefined, done: true};
     if (size === undefined) {
       if (this.buff === undefined) return this.reader.read();
       const value = this.buff;
       this.buff = undefined;
       return { value,  done: false };
+    }
+
+    // If not read as possible and buffer exists
+    if (!readAsPossible) {
+      // If buffer is empty
+      if (this.buff === undefined) {
+        const result = await this.reader.read();
+        if (result.done) return result;
+        if (result.value.byteLength > size) {
+          this.buff = result.value.slice(size);
+          return { value: result.value.slice(0, size), done: false };
+        }
+        return { value: result.value, done: false };
+      }
+      const value = this.buff;
+      this.buff = undefined;
+      return { value, done: false};
     }
 
     // If buffer exists and it is enough to return
