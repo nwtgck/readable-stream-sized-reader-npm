@@ -65,6 +65,33 @@ describe('ReadableStreamSizedReader', () => {
     }
   });
 
+  // NOTE: for coverage
+  it('should read specific size and return buffered bytes', async () => {
+    const readable = createReadableStream1();
+    const reader = new ReadableStreamSizedReader(readable.getReader());
+
+    {
+      const actual = await reader.read(1);
+      assert.deepStrictEqual(actual, { done: false, value: new Uint8Array([1]) });
+    }
+
+    {
+      const actual = await reader.read(1);
+      // NOTE: [2] should be already buffered
+      assert.deepStrictEqual(actual, { done: false, value: new Uint8Array([2]) });
+    }
+  });
+
+  // NOTE: for coverage
+  it('should done immediately when buffer is empty and read() returns done', async () => {
+    const readable = createReadableStream1();
+    const reader = new ReadableStreamSizedReader(readable.getReader());
+    // Read up everything
+    await reader.read(10);
+    const actual = await reader.read(10);
+    assert.deepStrictEqual(actual, { done: true, value: undefined });
+  });
+
   it('should read specific size and read without size together', async () => {
     const readable = createReadableStream1();
     const reader = new ReadableStreamSizedReader(readable.getReader());
