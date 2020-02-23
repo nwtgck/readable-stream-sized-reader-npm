@@ -128,6 +128,32 @@ describe('ReadableStreamSizedReader.prototype.read', () => {
       assert.deepStrictEqual(actual, { done: true, value: undefined });
     }
   });
+
+  it('should read() immediately when readAsPossible = false', async () => {
+    const readable = createReadableStream1();
+    const reader = new ReadableStreamSizedReader(readable.getReader());
+    {
+      const actual = await reader.read(4, false);
+      // At most 4 bytes, but 3 bytes are also fine
+      assert.deepStrictEqual(actual, { done: false, value: new Uint8Array([1, 2, 3]) });
+    }
+
+    {
+      const actual = await reader.read(1, false);
+      assert.deepStrictEqual(actual, { done: false, value: new Uint8Array([4]) });
+    }
+
+    {
+      const actual = await reader.read(1, false);
+      assert.deepStrictEqual(actual, { done: false, value: new Uint8Array([5]) });
+    }
+
+    {
+      await reader.read(5, false);
+      const actual = await reader.read(5, false);
+      assert.deepStrictEqual(actual, { done: true, value: undefined });
+    }
+  });
 });
 
 describe('ReadableStreamSizedReader.prototype.closed', () => {
