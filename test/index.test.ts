@@ -39,7 +39,7 @@ describe('createReadableStream1()', () => {
   });
 });
 
-describe('ReadableStreamSizedReader', () => {
+describe('ReadableStreamSizedReader.prototype.read', () => {
   it('should read specific size', async () => {
     const readable = createReadableStream1();
     const reader = new ReadableStreamSizedReader(readable.getReader());
@@ -127,5 +127,31 @@ describe('ReadableStreamSizedReader', () => {
       const actual = await reader.read(3);
       assert.deepStrictEqual(actual, { done: true, value: undefined });
     }
+  });
+});
+
+describe('ReadableStreamSizedReader.prototype.closed', () => {
+  it('should be fulfilled when read up everything', async () => {
+    const readable = createReadableStream1();
+    const reader = new ReadableStreamSizedReader(readable.getReader());
+    await reader.read(10);
+    await reader.closed;
+  });
+});
+
+describe('ReadableStreamSizedReader.prototype.cancel', () => {
+  it('should be closed', async () => {
+    const readable = createReadableStream1();
+    const reader = new ReadableStreamSizedReader(readable.getReader());
+    await reader.cancel();
+    await reader.closed;
+  });
+});
+
+describe('ReadableStreamSizedReader.prototype.releaseLock', () => {
+  it('should be called releaseLock', async () => {
+    const readable = createReadableStream1();
+    const reader = new ReadableStreamSizedReader(readable.getReader());
+    reader.releaseLock();
   });
 });
