@@ -16,3 +16,6 @@ while(true) {
   console.log('value:', value);
 }
 ```
+
+### Disable read-as-possible
+By default, `.read(n)` reads n bytes as possible. When you use `await reader.read(1024, false)`, it read at most 1024 bytes, but sometimes the bytes can be less than 1024 bytes.
