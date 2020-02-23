@@ -1,5 +1,3 @@
-// TODO: You should change this content.
-
 import * as assert from 'power-assert';
 import {ReadableStreamSizedReader} from '../src';
 
