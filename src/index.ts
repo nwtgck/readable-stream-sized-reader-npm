@@ -65,15 +65,16 @@ export class ReadableStreamSizedReader implements ReadableStreamDefaultReader<Ui
       if (this.buff === undefined) {
         const result = await this.reader.read();
         if (result.done) return result;
-        if (result.value.byteLength > size) {
-          this.buff = result.value.slice(size);
-          return { value: result.value.slice(0, size), done: false };
-        }
-        return { value: result.value, done: false };
+        this.buff = result.value;
+      }
+      if (this.buff.byteLength > size) {
+        const result = { value: this.buff.slice(0, size), done: false };
+        this.buff = this.buff.slice(size);
+        return result;
       }
       const value = this.buff;
       this.buff = undefined;
-      return { value, done: false};
+      return { value, done: false };
     }
 
     // If buffer exists and it is enough to return
