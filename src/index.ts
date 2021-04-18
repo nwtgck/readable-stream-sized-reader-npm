@@ -6,7 +6,7 @@ export class ReadableStreamSizedReader implements ReadableStreamDefaultReader<Ui
 
   constructor(private readonly reader: ReadableStreamDefaultReader<Uint8Array>) { }
 
-  get closed(): Promise<void> {
+  get closed(): Promise<undefined> {
     return this.reader.closed;
   }
 
@@ -18,7 +18,7 @@ export class ReadableStreamSizedReader implements ReadableStreamDefaultReader<Ui
     this.reader.releaseLock();
   }
 
-  private async readUp(size: number): Promise<ReadableStreamReadResult<Uint8Array>> {
+  private async readUp(size: number): Promise<ReadableStreamDefaultReadResult<Uint8Array>> {
     const values: Uint8Array[] = this.buff === undefined ? [] : [this.buff];
     let totalLen: number = this.buff === undefined ? 0 : this.buff.byteLength;
     this.buff = undefined;
@@ -50,7 +50,7 @@ export class ReadableStreamSizedReader implements ReadableStreamDefaultReader<Ui
    * @param size
    * @param readAsPossible If true, read n size bytes as possible. If false, read() is called() at most once internally.
    */
-  async read(size?: number, readAsPossible: boolean = true): Promise<ReadableStreamReadResult<Uint8Array>> {
+  async read(size?: number, readAsPossible: boolean = true): Promise<ReadableStreamDefaultReadResult<Uint8Array>> {
     if (this.done) return {value: undefined, done: true};
     if (size === undefined) {
       if (this.buff === undefined) return this.reader.read();
@@ -68,7 +68,7 @@ export class ReadableStreamSizedReader implements ReadableStreamDefaultReader<Ui
         this.buff = result.value;
       }
       if (this.buff.byteLength > size) {
-        const result = { value: this.buff.slice(0, size), done: false };
+        const result = { value: this.buff.slice(0, size), done: false } as const;
         this.buff = this.buff.slice(size);
         return result;
       }

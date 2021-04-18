@@ -21,18 +21,18 @@
   "author": "Ryo Ota <nwtgck@nwtgck.org> (https://github.com/nwtgck)",
   "license": "MIT",
   "devDependencies": {
-    "@types/jasmine": "^3.5.6",
-    "@types/node": "^13.7.4",
+    "@types/jasmine": "^3.6.9",
+    "@types/node": "^13.13.50",
     "@types/power-assert": "^1.5.3",
-    "jasmine-core": "^3.5.0",
+    "jasmine-core": "^3.7.1",
     "karma": "^4.4.1",
     "karma-chrome-launcher": "^3.1.0",
     "karma-firefox-launcher": "^1.3.0",
-    "karma-jasmine": "^3.1.1",
+    "karma-jasmine": "^3.3.1",
     "karma-typescript": "^4.1.1",
     "power-assert": "^1.6.1",
-    "ts-node": "^8.6.2",
-    "typescript": "^3.8.2"
+    "ts-node": "^8.10.2",
+    "typescript": "^4.2.4"
   },
   "dependencies": {
     "binconv": "^0.2.0"
