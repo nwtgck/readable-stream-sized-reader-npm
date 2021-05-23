@@ -31,7 +31,7 @@
     "karma-jasmine": "^4.0.1",
     "karma-typescript": "^5.5.1",
     "power-assert": "^1.6.1",
-    "ts-node": "^9.1.1",
+    "ts-node": "^10.0.0",
     "typescript": "^4.2.4"
   },
   "dependencies": {
