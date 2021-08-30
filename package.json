@@ -22,7 +22,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/jasmine": "^3.8.2",
-    "@types/node": "^15.0.2",
+    "@types/node": "^16.7.6",
     "@types/power-assert": "^1.5.4",
     "jasmine-core": "^3.9.0",
     "karma": "^4.4.1",
