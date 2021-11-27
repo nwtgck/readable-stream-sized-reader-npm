@@ -32,7 +32,7 @@
     "karma-typescript": "^5.5.2",
     "power-assert": "^1.6.1",
     "ts-node": "^10.4.0",
-    "typescript": "^4.4.4"
+    "typescript": "^4.5.2"
   },
   "dependencies": {
     "binconv": "^0.2.0"
