@@ -21,7 +21,7 @@
   "author": "Ryo Ota <nwtgck@nwtgck.org> (https://github.com/nwtgck)",
   "license": "MIT",
   "devDependencies": {
-    "@types/jasmine": "^3.10.3",
+    "@types/jasmine": "^4.0.0",
     "@types/node": "^14.18.12",
     "@types/power-assert": "^1.5.8",
     "jasmine-core": "^4.0.1",
