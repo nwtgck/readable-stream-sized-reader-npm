@@ -1,5 +1,5 @@
 # readable-stream-sized-reader
-[![CircleCI](https://circleci.com/gh/nwtgck/readable-stream-sized-reader-npm.svg?style=shield)](https://circleci.com/gh/nwtgck/readable-stream-sized-reader-npm)
+[![Node CI](https://github.com/nwtgck/readable-stream-sized-reader-npm/actions/workflows/ci.yml/badge.svg)](https://github.com/nwtgck/readable-stream-sized-reader-npm/actions/workflows/ci.yml)
 
 ReadableStream Reader with specified byte length read()
 
