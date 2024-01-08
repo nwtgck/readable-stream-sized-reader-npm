@@ -23,7 +23,7 @@
   "devDependencies": {
     "@types/jasmine": "^5.1.4",
     "@types/node": "^14.18.63",
-    "@types/power-assert": "^1.5.8",
+    "@types/power-assert": "^1.5.12",
     "jasmine-core": "^5.1.1",
     "karma": "^6.4.2",
     "karma-chrome-launcher": "^3.2.0",
